@@ -12,7 +12,8 @@ const rp = require('request-promise');
 // eg. https://www.eventbriteapi.com/v3/events/search/?token=ALPXUSBHYYOPXWXOSA54
 // eg. https://www.eventbriteapi.com/v3/events/search/?token=ALPXUSBHYYOPXWXOSA54&location.address=Manhattan&location.within=5mi
 
-routes.get('/api/eventbrite', (req, res) => {
+routes.post('/api/eventbrite', (req, res) => {
+  console.log("%%%%%%%%%%%%%",req)
   const q = req.query.q || undefined
   const locationAddress = req.query.location || undefined
   const locationLongitude = locationAddress ? undefined : req.query.longitude || undefined

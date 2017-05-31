@@ -9,6 +9,7 @@ const userRouter = require('./users.routes.js');
 const groupRouter = require('./groupsRouter.js');
 const twilioRoutes = require('./twilio.routes.js');
 const pushRoutes = require('./push.routes.js');
+const googleMapRoutes = require('./google.map.routes.js');
 
 // middleware to protect routes
 function ensureAuthenticated(req, res, next) {
@@ -35,6 +36,7 @@ routes.use(yelpRoutes);
 routes.use(eventbriteRoutes);
 routes.use(twilioRoutes);
 routes.use(pushRoutes);
+routes.use(googleMapRoutes);
 
 routes.use('/api', eventRouter, userRouter, groupRouter);
 

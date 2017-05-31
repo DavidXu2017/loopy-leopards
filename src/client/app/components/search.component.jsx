@@ -29,10 +29,18 @@ export default class SearchPageComponent extends React.Component {
 
     this.state = {
       expanded: false,
+      userLocation: 'Please enter your location',
+      latitude: 0,
+      longitude: 0,
+      toggleCheckBox: false,
+      userSearchEvent: '',
     }
 
     this.handleExpandChange = this.handleExpandChange.bind(this);
     this.handleSearchResult = this.handleSearchResult.bind(this);
+    this.handleGetCurrentLocation = this.handleGetCurrentLocation.bind(this);
+    this.handleAddressTextFieldChange = this.handleAddressTextFieldChange.bind(this);
+    this.handleSearchTextFieldChange = this.handleSearchTextFieldChange.bind(this);
   }
   
   // componentDidMount() {
@@ -148,8 +156,122 @@ export default class SearchPageComponent extends React.Component {
   };
 
   handleSearchResult () {
+    const userSesarchEvent = this.state.userSearchEvent;
+    const userLocation = this.state.userLocation;
+    ///////////////////Helper Functions///////////////////
+    let randomNumbers = [];
+    let eventsArray = [];
+    let eventsbriteData;
+    //var eventsYelpData;
+    //pick up 10 events from api
+    function pickupEvents(array) {
+      let length = array.length;
+        for (var i = 0; i < 13; i++) {
+          var randomNumber = Math.floor(Math.random()*length);
+          if (randomNumbers.indexOf(randomNumber) == -1) {
+            randomNumbers.push(randomNumber);
+            eventsArray.push(array[randomNumber]);
+          } else {
+            --i;
+          }
+        }
+    }
+
+    ///////////////////////////////////////////////////////
+    let init = {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      query: JSON.stringify({location: userLocation})
+    }
+    fetch('/api/eventbrite', init)
+      .then(res => res.json())
+      .catch(error => console.log("Can not received data from Eventbrite Api!!!"))
+      .then(res => {
+        pickupEvents(res.events);
+        console.log("pickup 13 events: ", eventsArray);
+        let eventsbrite = eventsArray.map(event => {
+          return {
+            img: event.logo.original.url,
+            phone: '',
+            address: '',
+            city: '',
+            state: '',
+            latitude: '',
+            longitude: '',
+            title: event.name.text,
+            description: event.description.text,
+            date_time: event.start.local,
+            url: event.url,
+          }
+        })
+        eventsbriteData = eventsbrite;
+      })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     this.setState({expanded: true});
   };
+
+  handleGetCurrentLocation (event) {
+    var that = this;
+    if (!that.state.toggleCheckBox) {
+      if (navigator.geolocation) { 
+          navigator.geolocation.getCurrentPosition(function (position) { 
+            var coords = position.coords; 
+            let init = {
+              method: 'POST',
+              credentials: 'include',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(
+                {
+                  latlngCode: {lat: coords.latitude, lng: coords.longitude},
+                }
+              )
+            }
+            fetch('/api/addressMap', init)
+            .then(res => res.json())
+            .catch(err => console.log("can not save event data!!!!!!"))
+            .then(res => {
+              that.setState({userLocation: res.results[0].formatted_address})
+            })
+            .then(res => console.log(that.state.userLocation));
+          }
+        )
+      }
+      that.setState({toggleCheckBox: true});
+    } else {
+      console.log("!!!!!!!!!!!");
+      that.setState({userLocation: 'Please enter your location'});
+      that.setState({toggleCheckBox:false});
+    }
+  }
+
+  handleAddressTextFieldChange (event) {
+    this.setState({userLocation: event.target.value});
+  }
+
+  handleSearchTextFieldChange (event) {
+    this.setState({userSearchEvent: event.target.value});
+  }
 
   render() {
 
@@ -176,17 +298,22 @@ export default class SearchPageComponent extends React.Component {
             showExpandableButton={true}
           />
           <TextField
-            hintText="Hint Text"
-            floatingLabelText="Your Location"
+            id="text-field-controlled"
+            value={this.state.userLocation}
+            onChange={this.handleAddressTextFieldChange}
             style={styles.position}
+            multiLine={true}
           />
           <Checkbox
             label="Current Location"
             style={styles.position}
+            onCheck={() => this.handleGetCurrentLocation(event)}
+            checked={this.state.toggleCheckBox}
           />
           <TextField
             hintText="Hint Text"
             floatingLabelText="Search"
+            onChange={this.handleSearchTextFieldChange}
             style={styles.position}
           />
           <br/>
