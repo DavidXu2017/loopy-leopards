@@ -149,27 +149,64 @@ export default class SearchPageComponent extends React.Component {
   };
 
   render() {
+
+    const styles = {
+      block: {
+        maxWidth: 250,
+      },
+      position: {
+        marginLeft: 16,
+      },
+      position_searchButton: {
+        marginBottom: 16,
+        marginLeft: 16,
+      },
+    }; 
+
     return (
       <div>
+        <Paper>
         <Card expanded={this.state.expanded} onExpandChange={this.handleExpandChange}>
           <CardHeader
             actAsExpander={true}
             showExpandableButton={true}
           />
-          <CardMedia
-          expandable={true}
-          overlay={<CardTitle title="Overlay title" subtitle="Overlay subtitle" />}
-          >
-          <img src="images/nature-600-337.jpg" />
-          </CardMedia>
-          <CardActions>
-            <FlatButton label="Search" onTouchTap={this.handleSearchResult} />
-          </CardActions>
+          <TextField
+            hintText="Hint Text"
+            floatingLabelText="Your Location"
+            style={styles.position}
+          />
+          <Checkbox
+            label="Current Location"
+            style={styles.position}
+          />
+          <TextField
+            hintText="Hint Text"
+            floatingLabelText="Search"
+            style={styles.position}
+          />
+          <br/>
+          <FlatButton 
+              label="Search" 
+              onTouchTap={this.handleSearchResult} 
+              style={styles.position_searchButton}
+          />
+          <br/>
+          
         </Card>
+        </Paper>
       </div>
     ); 
   }
 }
+
+// <CardMedia
+//   expandable={true}
+//   overlay={<CardTitle title="Overlay title" subtitle="Overlay subtitle" />}
+// >
+//   <img src="images/nature-600-337.jpg" />
+// </CardMedia>
+
 // this.handleReduce = this.handleReduce.bind(this);
 // handleReduce () {
 //   this.setState({expanded: false});
