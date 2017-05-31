@@ -18,6 +18,9 @@ import ContentRemove from 'material-ui/svg-icons/content/remove';
 import Chip from 'material-ui/Chip';
 
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import {GridList, GridTile} from 'material-ui/GridList';
+import StarBorder from 'material-ui/svg-icons/toggle/star-border';
+import IconButton from 'material-ui/IconButton';
 
 
 export default class SearchPageComponent extends React.Component {
@@ -151,9 +154,6 @@ export default class SearchPageComponent extends React.Component {
   render() {
 
     const styles = {
-      block: {
-        maxWidth: 250,
-      },
       position: {
         marginLeft: 16,
       },
@@ -161,6 +161,10 @@ export default class SearchPageComponent extends React.Component {
         marginBottom: 16,
         marginLeft: 16,
       },
+      img: {
+        height: 200,
+        width: 500,
+      }
     }; 
 
     return (
@@ -192,7 +196,14 @@ export default class SearchPageComponent extends React.Component {
               style={styles.position_searchButton}
           />
           <br/>
-          
+
+          <CardMedia
+            expandable={true}
+            overlay={<CardTitle title="Overlay title" subtitle="Overlay subtitle" />}
+          >
+            <img style={styles.img} src="https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F30775164%2F23670314418%2F1%2Foriginal.jpg?s=9cf82d01af4a8d98809317781d0147ec" />
+          </CardMedia>
+
         </Card>
         </Paper>
       </div>
