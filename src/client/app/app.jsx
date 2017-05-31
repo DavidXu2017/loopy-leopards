@@ -20,7 +20,7 @@ import NavContainer from './containers/nav.container.jsx';
 import HomePageContainer from './containers/home.container.jsx';
 import ProfilePageContainer from './containers/profile.container.jsx';
 import GroupPageContainer from './containers/group.container.jsx';
-import FindPageContainer from './containers/find.container.jsx';
+import SearchPageContainer from './containers/search.container.jsx';
 import EventsPageContainer from './containers/events.container.jsx';
 
 // import helpers
@@ -51,7 +51,7 @@ class App extends React.Component {
                   <Route exact path="/home" component={HomePageContainer}/>
                   <Route exact path="/profile" component={ProfilePageContainer}/>
                   <Route exact path="/group" component={GroupPageContainer}/>
-                  <Route exact path="/find" component={FindPageContainer}/>
+                  <Route exact path="/search" component={SearchPageContainer}/>
                   <Route exact path="/events" component={EventsPageContainer}/>
           	    </Switch>
               </HashRouter>

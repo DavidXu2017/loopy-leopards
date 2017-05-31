@@ -28,7 +28,7 @@ export default class FindPageComponent extends React.Component {
     this.state = {
       controlledDate: null,
       value12: null,
-      testValue: 'Anything you want to say?',
+      testValue: '',
       open: false,
       userStatus: [],
       clickUserStatus: false,

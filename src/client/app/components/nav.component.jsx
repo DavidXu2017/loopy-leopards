@@ -45,8 +45,8 @@ export default class NavComponent extends React.Component {
                 <Link to="/profile"> 
                   <FlatButton className="drawerItem" label="PROFILE" /> 
                 </Link>
-                <Link to="/find"> 
-                  <FlatButton className="drawerItem" label="FIND" /> 
+                <Link to="/search"> 
+                  <FlatButton className="drawerItem" label="SEARCH" /> 
                 </Link>
                 <Link to="/events"> 
                   <FlatButton className="drawerItem" label="EVENTS" /> 
