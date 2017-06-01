@@ -35,6 +35,7 @@ export default class SearchPageComponent extends React.Component {
       toggleCheckBox: false,
       userSearchEvent: '',
       events: [],
+      showMoreButton: false,
     }
 
     this.handleExpandChange = this.handleExpandChange.bind(this);
@@ -43,6 +44,7 @@ export default class SearchPageComponent extends React.Component {
     this.handleAddressTextFieldChange = this.handleAddressTextFieldChange.bind(this);
     this.handleSearchTextFieldChange = this.handleSearchTextFieldChange.bind(this);
     this.handleMoreSearchResult = this.handleMoreSearchResult.bind(this);
+    this.handleBackToTop = this.handleBackToTop.bind(this);
   }
 
   handleExpandChange (expanded) {
@@ -171,6 +173,7 @@ export default class SearchPageComponent extends React.Component {
         this.props.addEvents(getUnique(result));
       })
     this.setState({expanded: true});
+    this.setState({showMoreButton: false});
   };
 
   handleGetCurrentLocation (event) {
@@ -216,8 +219,14 @@ export default class SearchPageComponent extends React.Component {
     this.setState({userSearchEvent: event.target.value});
   }
 
-  handleMoreSearchResult() {
-    this.setState({events: this.props.events})
+  handleMoreSearchResult () {
+    this.setState({events: this.props.events});
+    this.setState({showMoreButton: true});
+  }
+
+  handleBackToTop () {
+    window.scrollBy(0,-10);
+    scrolldelay = setTimeout(this.handleBackToTop(),100);
   }
 
   render() {
@@ -303,8 +312,16 @@ export default class SearchPageComponent extends React.Component {
             })
           }
           <FlatButton 
+            expandable={true}
             label="Show more" 
             onTouchTap={this.handleMoreSearchResult} 
+            style={styles.position_searchButton}
+            disabled={this.state.showMoreButton}
+          />
+          <FlatButton
+            expandable={true} 
+            label="Top" 
+            onTouchTap={this.handleBackToTop} 
             style={styles.position_searchButton}
           />
         </Card>
