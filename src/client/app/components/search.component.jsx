@@ -172,14 +172,16 @@ export default class SearchPageComponent extends React.Component {
         }
         console.log("result: ", getUnique(result))
         this.props.addEvents(getUnique(result));
+        this.setState({searchButton: false});
       })
     this.setState({expanded: true});
     this.setState({showMoreButton: false});
+    this.setState({searchButton: true});
   };
 
   handleGetCurrentLocation (event) {
     var that = this;
-    that.state.searchButton = true;
+    that.setState({searchButton: true});
     if (!that.state.toggleCheckBox) {
       if (navigator.geolocation) { 
           navigator.geolocation.getCurrentPosition(function (position) { 
