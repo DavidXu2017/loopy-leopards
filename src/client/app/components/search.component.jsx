@@ -1,27 +1,9 @@
 import React from 'react';
 import FlatButton from 'material-ui/FlatButton';
 import { HashRouter, Router, Link } from 'react-router-dom';
-import Paper from 'material-ui/Paper';
-import Subheader from 'material-ui/Subheader';
-import {List, ListItem} from 'material-ui/List';
-import Divider from 'material-ui/Divider';
-import TimePicker from 'material-ui/TimePicker';
-import DatePicker from 'material-ui/DatePicker';
 import TextField from 'material-ui/TextField';
 import Checkbox from 'material-ui/Checkbox';
-import RaisedButton from 'material-ui/RaisedButton';
-import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
-import Dialog from 'material-ui/Dialog';
-import Avatar from 'material-ui/Avatar';
-import ContentAdd from 'material-ui/svg-icons/content/add';
-import ContentRemove from 'material-ui/svg-icons/content/remove';
-import Chip from 'material-ui/Chip';
-
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
-import {GridList, GridTile} from 'material-ui/GridList';
-import StarBorder from 'material-ui/svg-icons/toggle/star-border';
-import IconButton from 'material-ui/IconButton';
-
 
 export default class SearchPageComponent extends React.Component {
   constructor(props) {
@@ -36,6 +18,7 @@ export default class SearchPageComponent extends React.Component {
       userSearchEvent: '',
       events: [],
       showMoreButton: false,
+      searchButton: false,
     }
 
     this.handleExpandChange = this.handleExpandChange.bind(this);
@@ -50,6 +33,24 @@ export default class SearchPageComponent extends React.Component {
   handleExpandChange (expanded) {
     this.setState({expanded: expanded});
   };
+
+  handleAddressTextFieldChange (event) {
+    this.setState({userLocation: event.target.value});
+  }
+
+  handleSearchTextFieldChange (event) {
+    this.setState({userSearchEvent: event.target.value});
+  }
+
+  handleMoreSearchResult () {
+    this.setState({events: this.props.events});
+    this.setState({showMoreButton: true});
+  }
+
+  handleBackToTop () {
+    window.scrollBy(0,-10);
+    scrolldelay = setTimeout(this.handleBackToTop(),100);
+  }
 
   handleSearchResult () {
     const userSearchEvent = this.state.userSearchEvent;
@@ -178,6 +179,7 @@ export default class SearchPageComponent extends React.Component {
 
   handleGetCurrentLocation (event) {
     var that = this;
+    that.state.searchButton = true;
     if (!that.state.toggleCheckBox) {
       if (navigator.geolocation) { 
           navigator.geolocation.getCurrentPosition(function (position) { 
@@ -197,9 +199,10 @@ export default class SearchPageComponent extends React.Component {
             }
             fetch('/api/addressMap', init)
             .then(res => res.json())
-            .catch(err => console.log("can not save event data!!!!!!"))
+            .catch(err => console.log("can not save event data: ", err))
             .then(res => {
-              that.setState({userLocation: res.results[0].formatted_address})
+              that.setState({searchButton: false});
+              that.setState({userLocation: res.results[0].formatted_address});
             })
           }
         )
@@ -207,31 +210,15 @@ export default class SearchPageComponent extends React.Component {
       that.setState({toggleCheckBox: true});
     } else {
       that.setState({userLocation: 'Please enter your location'});
-      that.setState({toggleCheckBox:false});
+      that.setState({toggleCheckBox: false});
+      that.setState({searchButton: false});
     }
   }
 
-  handleAddressTextFieldChange (event) {
-    this.setState({userLocation: event.target.value});
-  }
-
-  handleSearchTextFieldChange (event) {
-    this.setState({userSearchEvent: event.target.value});
-  }
-
-  handleMoreSearchResult () {
-    this.setState({events: this.props.events});
-    this.setState({showMoreButton: true});
-  }
-
-  handleBackToTop () {
-    window.scrollBy(0,-10);
-    scrolldelay = setTimeout(this.handleBackToTop(),100);
-  }
 
   render() {
     const { events } = this.props;
-    //console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1",events)
+    console.log("events from props: ",events)
     const styles = {
       position: {
         marginLeft: 16,
@@ -248,7 +235,6 @@ export default class SearchPageComponent extends React.Component {
 
     return (
       <div>
-        <Paper>
         <Card expanded={this.state.expanded} onExpandChange={this.handleExpandChange}>
           <CardHeader
             actAsExpander={true}
@@ -278,6 +264,7 @@ export default class SearchPageComponent extends React.Component {
               label="Search" 
               onTouchTap={this.handleSearchResult} 
               style={styles.position_searchButton}
+              disabled={this.state.searchButton}
           />
           <br/>
           {
@@ -325,7 +312,6 @@ export default class SearchPageComponent extends React.Component {
             style={styles.position_searchButton}
           />
         </Card>
-        </Paper>
       </div>
     ); 
   }
