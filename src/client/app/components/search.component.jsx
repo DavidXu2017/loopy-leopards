@@ -175,12 +175,13 @@ export default class SearchPageComponent extends React.Component {
             i--;
           }
         }
-        console.log("result: ", getUnique(result))
-        this.props.addEvents(getUnique(result));
+        result = getUnique(result);
+        console.log("result: ", result)
+        this.props.addEvents(result);
+        this.setState({expanded: true});
         this.setState({searchButton: false});
+        result.length > 20 ? this.setState({showMoreButton: false}) : this.setState({showMoreButton: true})
       })
-    this.setState({expanded: true});
-    this.setState({showMoreButton: false});
     this.setState({searchButton: true});
   };
 
@@ -245,7 +246,6 @@ export default class SearchPageComponent extends React.Component {
         <Card expanded={this.state.expanded} onExpandChange={this.handleExpandChange}>
           <CardHeader
             actAsExpander={true}
-            showExpandableButton={true}
           />
           <TextField
             id="text-field-controlled"
