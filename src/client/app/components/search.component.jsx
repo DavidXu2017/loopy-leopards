@@ -28,6 +28,7 @@ export default class SearchPageComponent extends React.Component {
     this.handleSearchTextFieldChange = this.handleSearchTextFieldChange.bind(this);
     this.handleMoreSearchResult = this.handleMoreSearchResult.bind(this);
     this.handleBackToTop = this.handleBackToTop.bind(this);
+    this.handleClickedEvent = this.handleClickedEvent.bind(this);
   }
 
   handleExpandChange (expanded) {
@@ -45,6 +46,10 @@ export default class SearchPageComponent extends React.Component {
   handleMoreSearchResult () {
     this.setState({events: this.props.events});
     this.setState({showMoreButton: true});
+  }
+
+  handleClickedEvent () {
+    console.log("Hello World")
   }
 
   handleBackToTop () {
@@ -276,6 +281,7 @@ export default class SearchPageComponent extends React.Component {
                 <CardMedia
                   expandable={true}
                   overlay={<CardTitle title={event.title}/>}
+                  onClick={this.handleClickedEvent}
                 >
                   <img style={styles.img} src={event.img}/>
                 </CardMedia>
@@ -292,6 +298,7 @@ export default class SearchPageComponent extends React.Component {
                 <CardMedia
                   expandable={true}
                   overlay={<CardTitle title={event.title}/>}
+                  onClick={this.handleClickedEvent}
                 >
                   <img style={styles.img} src={event.img}/>
                 </CardMedia>
